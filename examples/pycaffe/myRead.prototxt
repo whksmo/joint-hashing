@@ -1,0 +1,10 @@
+layer{
+    name:'mylayer'
+    type:'Python'
+    top:'images'
+    python_param{
+        module:'pyreadlayer'
+        layer:'DataReadLayer'
+        param_str:"'source_dir': '/data/images/cifar-10/test','target_size': 227,'batch_size': 50"
+    }
+}

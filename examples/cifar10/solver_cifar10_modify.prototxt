@@ -1,0 +1,15 @@
+net: "examples/cifar10/train_val_cifar10_modify.prototxt"
+test_iter: 200
+test_interval: 1000
+base_lr: 0.001
+lr_policy: "step"
+gamma: 0.1
+stepsize: 10000
+display: 1000
+max_iter: 20000
+momentum: 0.9
+weight_decay: 0.0005
+snapshot: 50000
+snapshot_prefix: "cifar10_modify"
+random_seed: 42
+solver_mode: GPU

@@ -1,0 +1,18 @@
+net: "examples/bone-finetune/train_val_bone_independent.prototxt"
+test_iter: 20
+test_interval: 100
+# lr for fine-tuning should be lower than when starting from scratch
+base_lr: 0.001
+lr_policy: "step"
+gamma: 0.1
+# stepsize should also be lower, as we're closer to being done
+stepsize: 1000
+display: 100
+max_iter: 2000
+momentum: 0.9
+weight_decay: 0.0005
+snapshot: 50000
+# snapshot_prefix: "bone_finetune_independent";
+snapshot_prefix: "bone_independent";
+# uncomment the following to default to CPU mode solving
+# solver_mode: CPU
