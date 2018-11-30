@@ -1,39 +1,10 @@
 name: "SSDH"
-layer {
-  name: "data"
-  type: "Data"
-  top: "data"
-  top: "label"
-  include {
-    phase: TRAIN
-  }
-  transform_param {
-    mirror: true
-    crop_size: 227
-    mean_file: "./data/ilsvrc12/imagenet_mean.binaryproto"
-  }
-  data_param {
-    source: "data/cifar10/cifar10_train_leveldb"
-    batch_size: 32
-  }
-}
-layer {
-  name: "data"
-  type: "Data"
-  top: "data"
-  top: "label"
-  include {
-    phase: TEST
-  }
-  transform_param {
-    mirror: false
-    crop_size: 227
-    mean_file: "./data/ilsvrc12/imagenet_mean.binaryproto"
-  }
-  data_param {
-    source: "data/cifar10/cifar10_val_leveldb"
-    batch_size: 50
-  }
+input: "data"
+input_shape {
+  dim: 10
+  dim: 3
+  dim: 227
+  dim: 227
 }
 layer {
   name: "conv1"
@@ -327,13 +298,13 @@ layer {
   name: "relu7"
   type: "ReLU"
   bottom: "fc7"
-  top: "fc7"
+  top: "relu7"
 }
 layer {
   name: "drop7"
   type: "Dropout"
-  bottom: "fc7"
-  top: "fc7"
+  bottom: "relu7"
+  top: "drop7"
   dropout_param {
     dropout_ratio: 0.5
   }
@@ -341,7 +312,7 @@ layer {
 layer {
   name: "latent"
   type: "InnerProduct"
-  bottom: "fc7"
+  bottom: "drop7"
   top: "latent"
   param {
     lr_mult: 1
@@ -368,92 +339,4 @@ layer {
   top: "latent_sigmoid"
   name: "latent_sigmoid"
   type: "Sigmoid"
-}
-layer {
-  bottom: "latent_sigmoid"
-  bottom: "latent_sigmoid"
-  name: "loss_1"
-  type: "K1_EuclideanLoss"
-  propagate_down: 1
-  propagate_down: 0
-  top: "loss: forcing-binary"
-  loss_weight: 1
-}
-layer {
-  name: "latent_sigmoid_reshape"
-  type: "Reshape"
-  bottom: "latent_sigmoid"
-  top: "latent_sigmoid_reshape"
-  reshape_param {
-    shape {
-      dim: 0  # copy the dimension from below
-      dim: 1
-      dim: 1
-      dim: -1 # infer it from the other dimensions
-    }
-  }
-}
-layer {
-  name: "latent_sigmoid_avg"
-  type: "Pooling"
-  bottom: "latent_sigmoid_reshape"
-  top: "latent_sigmoid_avg"
-  pooling_param {
-    pool: AVE
-    kernel_h: 1
-    kernel_w: 36
-  }
-}
-layer {
-  bottom: "latent_sigmoid_avg"
-  bottom: "latent_sigmoid_avg"
-  name: "loss_2"
-  type: "K2_EuclideanLoss"
-  propagate_down: 1
-  propagate_down: 0
-  top: "loss: 50%-fire-rate"
-  loss_weight: 1
-}
-layer {
-  name: "fc9"
-  type: "InnerProduct"
-  bottom: "latent_sigmoid"
-  top: "fc9"
-  param {
-    lr_mult: 10
-    decay_mult: 1
-  }
-  param {
-    lr_mult: 20
-    decay_mult: 0
-  }
-  inner_product_param {
-    num_output: 10
-    weight_filler {
-      type: "gaussian"
-      std: 0.2
-    }
-    bias_filler {
-      type: "constant"
-      value: 0
-    }
-  }
-}
-layer {
-  name: "accuracy"
-  type: "Accuracy"
-  bottom: "fc9"
-  bottom: "label"
-  top: "accuracy"
-  include {
-    phase: TEST
-  }
-}
-layer {
-  name: "loss"
-  type: "SoftmaxWithLoss"
-  bottom: "fc9"
-  bottom: "label"
-  top: "loss: classfication-error"
-  loss_weight: 1
 }

@@ -43,13 +43,252 @@ end
 phase = 'test';
 fprintf('......%s start...... \n\n', method_name);
 use_gpu = param.use_gpu;
-switch(method_name)
+% switch(method_name)
 
-case 'MODIFY24+LSH24'
-    feat_len = 24;
-    model_file = sprintf('./examples/cifar10/cifar10_%d_iter_20000.caffemodel', feat_len);
-    model_def_file = sprintf('./examples/bone-finetune/deploy_%d.prototxt', feat_len);
+% case 'MODIFY24+LSH24'
+%     feat_len = 24;
+%     model_file = sprintf('./examples/cifar10/cifar10_%d_iter_20000.caffemodel', feat_len);
+%     model_def_file = sprintf('./examples/bone-finetune/deploy_%d.prototxt', feat_len);
     
+%     LSHparam_fc7.nbits = param.nbits - feat_len;
+%     LSHparam_fc7.dim = 4096;
+%     LSHparam_fc7 = trainLSH(LSHparam_fc7);
+    
+%     if exist(binary_test_file, 'file') ~= 0 && use_saved
+%         load(binary_test_file);
+%     else
+%         [feat_test, ft_fc7_tst, ipt_tst] = feat_batch(use_gpu, model_def_file, model_file, test_file_list, feat_len);
+%         save([result_folder, 'ipt_tst'], 'ipt_tst');
+%         save([result_folder, 'ft_fc7_tst'], 'ft_fc7_tst');
+%         b_fc7_tst = compressLSH(ft_fc7_tst', LSHparam_fc7);
+%         % b_fc7_tst = compressAEH(ft_fc7_tst', AEHparam_fc7);
+%         % b_ipt_tst = compressAEH(ipt_tst', AEHparam_fc7);
+%         % b_ipt_tst = compressLSH(ipt_tst', LSHparam_ipt);
+%         save(feat_test_file, 'feat_test', '-v7.3');
+%         binary_test = (feat_test>0.5);
+
+%         % binary_test = [binary_test; b_fc7_tst'; b_ipt_tst'];
+%         % binary_test = [binary_test; b_ipt_tst'];
+%         binary_test = [binary_test; b_fc7_tst'];
+%         binary_test = binary_test>0;
+%         save(binary_test_file,'binary_test','-v7.3');
+%     end
+    
+%     if exist(binary_train_file, 'file') ~= 0 && use_saved
+%         load(binary_train_file);
+%     else
+%         [feat_train, ft_fc7_trn, ipt_trn]= feat_batch(use_gpu, model_def_file, model_file, train_file_list, feat_len);
+%         save([result_folder, 'ipt_trn'], 'ipt_trn');
+%         save([result_folder, 'ft_fc7_trn'], 'ft_fc7_trn');
+%         b_fc7_trn = compressLSH(ft_fc7_trn', LSHparam_fc7);
+%         % b_fc7_trn = compressAEH(ft_fc7_trn', AEHparam_fc7);
+%         % b_ipt_trn = compressAEH(ipt_trn', AEHparam_fc7);
+%         % b_ipt_trn = compressLSH(ipt_trn', LSHparam_ipt);
+%         save(feat_train_file, 'feat_train', '-v7.3');
+%         binary_train = (feat_train>0.5);
+%         % binary_train = [binary_train; b_fc7_trn'; b_ipt_trn'];
+%         % binary_train = [binary_train; b_ipt_trn'];
+%         binary_train = [binary_train; b_fc7_trn'];
+%         binary_train = binary_train>0;
+%         save(binary_train_file,'binary_train','-v7.3');
+%     end
+% case 'MODIFY32+LSH16'
+%     feat_len = 32;
+%     model_file = sprintf('./examples/cifar10/cifar10_%d_iter_20000.caffemodel', feat_len);
+%     model_def_file = sprintf('./examples/bone-finetune/deploy_%d.prototxt', feat_len);
+    
+%     LSHparam_fc7.nbits = param.nbits - feat_len;
+%     LSHparam_fc7.dim = 4096;
+%     LSHparam_fc7 = trainLSH(LSHparam_fc7);
+    
+%     if exist(binary_test_file, 'file') ~= 0 && use_saved
+%         load(binary_test_file);
+%     else
+%         [feat_test, ft_fc7_tst, ipt_tst] = feat_batch(use_gpu, model_def_file, model_file, test_file_list, feat_len);
+%         save([result_folder, 'ft_fc7_tst'], 'ft_fc7_tst');
+%         b_fc7_tst = compressLSH(ft_fc7_tst', LSHparam_fc7);
+%         save(feat_test_file, 'feat_test', '-v7.3');
+%         binary_test = (feat_test>0.5);
+%         binary_test = [binary_test; b_fc7_tst'];
+%         binary_test = binary_test>0;
+%         save(binary_test_file,'binary_test','-v7.3');
+%     end
+    
+%     if exist(binary_train_file, 'file') ~= 0 && use_saved
+%         load(binary_train_file);
+%     else
+%         [feat_train, ft_fc7_trn, ipt_trn]= feat_batch(use_gpu, model_def_file, model_file, train_file_list, feat_len);
+%         save([result_folder, 'ft_fc7_trn'], 'ft_fc7_trn');
+%         b_fc7_trn = compressLSH(ft_fc7_trn', LSHparam_fc7);
+%         save(feat_train_file, 'feat_train', '-v7.3');
+%         binary_train = (feat_train>0.5);
+%         binary_train = [binary_train; b_fc7_trn'];
+%         binary_train = binary_train>0;
+%         save(binary_train_file,'binary_train','-v7.3');
+%     end
+
+% case 'SSDH24+ORI24'
+%     assert(strcmp(exp_data.ft_type, 'euclidean'));
+%     feat_len = 24;
+%     param.sp_bits = feat_len;
+%     model_file = sprintf('./models/%s/%s_%d_iter_50000.caffemodel', db_name, db_name, feat_len);
+%     model_def_file = sprintf('./examples/%s/deploy_%d.prototxt', db_name, feat_len);
+   
+%     LSHparam_ipt.nbits = param.nbits - feat_len;
+%     LSHparam_ipt.dim = 32 * 32 * 3;
+%     LSHparam_ipt = trainLSH(LSHparam_ipt);
+
+%     num_training = size(train_data, 1);
+%     XX = [train_data; test_data];
+%     sampleMean = mean(XX,1);
+%     XX = (double(XX)-repmat(sampleMean,size(XX,1),1));
+%     train_data = XX(1:num_training, :);
+%     test_data = XX(num_training+1:end, :);
+
+%     if exist(binary_test_file, 'file') ~= 0 && use_saved
+%         load(binary_test_file);
+%     else
+%         [feat_test, ft_fc7_tst, ipt_tst] = feat_batch(use_gpu, model_def_file, model_file, test_file_list, feat_len);
+%         b_ipt_tst = compressLSH(test_data, LSHparam_ipt);
+%         save(feat_test_file, 'feat_test', '-v7.3');
+%         binary_test = (feat_test>0.5);
+%         binary_test = [binary_test; b_ipt_tst'];
+%         binary_test = binary_test>0;
+%         save(binary_test_file,'binary_test','-v7.3');
+%     end
+    
+%     if exist(binary_train_file, 'file') ~= 0 && use_saved
+%         load(binary_train_file);
+%     else
+%         [feat_train, ft_fc7_trn, ipt_trn]= feat_batch(use_gpu, model_def_file, model_file, train_file_list, feat_len);
+%         b_ipt_trn = compressLSH(train_data, LSHparam_ipt);
+%         save(feat_train_file, 'feat_train', '-v7.3');
+%         binary_train = (feat_train>0.5);
+%         binary_train = [binary_train; b_ipt_trn'];
+%         binary_train = binary_train>0;
+%         save(binary_train_file,'binary_train','-v7.3');
+%     end
+% case 'SSDH24+HOG24'
+%     if ~strcmp(exp_data.ft_type, 'hog')
+%         hog_data = load(['./data/', db_name, '/cifar_hog.mat', ]);
+%         train_data = hog_data.train_data;
+%         test_data = hog_data.test_data;
+%     end
+%     feat_len = 24;
+%     param.sp_bits = feat_len;
+%     model_file = sprintf('./models/%s/%s_%d_iter_50000.caffemodel', db_name, db_name, feat_len);
+%     model_def_file = sprintf('./examples/%s/deploy_%d.prototxt', db_name, feat_len);
+   
+%     num_training = size(train_data, 1);
+%     XX = [train_data; test_data];
+%     sampleMean = mean(XX,1);
+%     XX = (double(XX)-repmat(sampleMean,size(XX,1),1));
+%     train_data = XX(1:num_training, :);
+%     test_data = XX(num_training+1:end, :);
+
+%     LSHparam_ipt.nbits = param.nbits - feat_len;
+%     LSHparam_ipt.dim = size(test_data, 2);
+%     LSHparam_ipt = trainLSH(LSHparam_ipt);
+    
+%     if exist(binary_test_file, 'file') ~= 0 && use_saved
+%         load(binary_test_file);
+%     else
+%         feat_test = feat_batch(use_gpu, model_def_file, model_file, test_file_list, feat_len);
+%         b_ipt_tst = compressLSH(test_data, LSHparam_ipt);
+%         save(feat_test_file, 'feat_test', '-v7.3');
+%         binary_test = (feat_test>0.5);
+%         binary_test = [binary_test; b_ipt_tst'];
+%         binary_test = binary_test>0;
+%         save(binary_test_file,'binary_test','-v7.3');
+%     end
+    
+%     if exist(binary_train_file, 'file') ~= 0 && use_saved
+%         load(binary_train_file);
+%     else
+%         feat_train = feat_batch(use_gpu, model_def_file, model_file, train_file_list, feat_len);
+%         b_ipt_trn = compressLSH(train_data, LSHparam_ipt);
+%         save(feat_train_file, 'feat_train', '-v7.3');
+%         binary_train = (feat_train>0.5);
+%         binary_train = [binary_train; b_ipt_trn'];
+%         binary_train = binary_train>0;
+%         save(binary_train_file,'binary_train','-v7.3');
+%     end
+
+% end
+
+
+if ~isempty(strfind(method_name, 'SSDH')) && ~isempty(strfind(method_name, 'AEH'))
+    feat_len = sscanf(method_name, 'SSDH%d');
+    param.sp_bits = feat_len;
+    model_file = sprintf('./models/%s/%s_%d_iter_50000.caffemodel', db_name, db_name, feat_len);
+    model_def_file = sprintf('./examples/%s/deploy_%d.prototxt', db_name, feat_len);
+    aec_file = sprintf('%s/autoenc.mat', result_folder);
+    AEHparam_fc7.nbits = param.nbits - feat_len;
+    AEHparam_fc7.dim = 4096;
+    if exist(binary_train_file, 'file') ~= 0 && use_saved
+        load(binary_train_file);
+    else
+        if ~exist([result_folder, 'ft_fc7_trn.mat'], 'file')
+            [feat_train, ft_fc7_trn]= feat_batch(use_gpu, model_def_file, model_file, train_file_list, feat_len);
+            save([result_folder, 'ft_fc7_trn.mat'], 'ft_fc7_trn');
+        else
+            load([result_folder, 'ft_fc7_trn.mat']);
+            load(feat_train_file);
+        end
+
+        if exist(aec_file, 'file')
+            load(aec_file,'autoenc');
+            AEHparam_fc7.aec = autoenc;
+        else
+            fprintf('start training autoencoder\n');
+            load([result_folder, 'ft_fc7_trn.mat']);
+            ae_trn_data = ft_fc7_trn;
+            ae_trn_data_batch = ae_trn_data(:,1:20000);
+            autoenc = trainAutoencoder(ae_trn_data_batch,AEHparam_fc7.nbits,...
+                                        'useGPU',use_gpu,...
+                                        'SparsityProportion',0,...
+                                        'ShowProgressWindow',true);
+            net = network(autoenc);
+            ae_trn_data_batch = ae_trn_data(:,20001:40000);
+            net = train(net, ae_trn_data_batch, ae_trn_data_batch,'useGPU','yes');
+            ae_trn_data_batch = ae_trn_data(:,40001:end);
+            net = train(net, ae_trn_data_batch, ae_trn_data_batch,'useGPU','yes');
+            save([result_folder 'autoenc.mat'], 'autoenc');
+            AEHparam_fc7.aec = autoenc;
+        end
+        AEHparam_fc7 = trainAEH(AEHparam_fc7);
+
+        b_fc7_trn = compressAEH(ft_fc7_trn', AEHparam_fc7);
+        save(feat_train_file, 'feat_train', '-v7.3');
+        binary_train = (feat_train>0.5);
+        binary_train = [binary_train; b_fc7_trn'];
+        binary_train = binary_train>0;
+        save(binary_train_file,'binary_train','-v7.3');
+    end
+
+    if exist(binary_test_file, 'file') ~= 0 && use_saved
+        load(binary_test_file);
+    else
+        if ~exist([result_folder, 'ft_fc7_tst.mat'], 'file')
+            [feat_test, ft_fc7_tst] = feat_batch(use_gpu, model_def_file, model_file, test_file_list, feat_len);
+            save([result_folder, 'ft_fc7_tst.mat'], 'ft_fc7_tst');
+        else
+            load([result_folder, 'ft_fc7_tst.mat']);
+            load(feat_test_file);
+        end
+        b_fc7_tst = compressAEH(ft_fc7_tst', AEHparam_fc7);
+        save(feat_test_file, 'feat_test', '-v7.3');
+        binary_test = (feat_test>0.5);
+        binary_test = [binary_test; b_fc7_tst'];
+        binary_test = binary_test>0;
+        save(binary_test_file,'binary_test','-v7.3');
+    end
+elseif ~isempty(strfind(method_name, 'SSDH')) && ~isempty(strfind(method_name, 'LSH'))
+    feat_len = sscanf(method_name, 'SSDH%d');
+    param.sp_bits = feat_len;
+    model_file = sprintf('./models/%s/%s_%d_iter_50000.caffemodel', db_name, db_name, feat_len);
+    model_def_file = sprintf('./examples/%s/deploy_%d.prototxt', db_name, feat_len);
+   
     LSHparam_fc7.nbits = param.nbits - feat_len;
     LSHparam_fc7.dim = 4096;
     LSHparam_fc7 = trainLSH(LSHparam_fc7);
@@ -58,17 +297,10 @@ case 'MODIFY24+LSH24'
         load(binary_test_file);
     else
         [feat_test, ft_fc7_tst, ipt_tst] = feat_batch(use_gpu, model_def_file, model_file, test_file_list, feat_len);
-        save([result_folder, 'ipt_tst'], 'ipt_tst');
         save([result_folder, 'ft_fc7_tst'], 'ft_fc7_tst');
         b_fc7_tst = compressLSH(ft_fc7_tst', LSHparam_fc7);
-        % b_fc7_tst = compressAEH(ft_fc7_tst', AEHparam_fc7);
-        % b_ipt_tst = compressAEH(ipt_tst', AEHparam_ipt);
-        % b_ipt_tst = compressLSH(ipt_tst', LSHparam_ipt);
         save(feat_test_file, 'feat_test', '-v7.3');
         binary_test = (feat_test>0.5);
-
-        % binary_test = [binary_test; b_fc7_tst'; b_ipt_tst'];
-        % binary_test = [binary_test; b_ipt_tst'];
         binary_test = [binary_test; b_fc7_tst'];
         binary_test = binary_test>0;
         save(binary_test_file,'binary_test','-v7.3');
@@ -78,46 +310,6 @@ case 'MODIFY24+LSH24'
         load(binary_train_file);
     else
         [feat_train, ft_fc7_trn, ipt_trn]= feat_batch(use_gpu, model_def_file, model_file, train_file_list, feat_len);
-        save([result_folder, 'ipt_trn'], 'ipt_trn');
-        save([result_folder, 'ft_fc7_trn'], 'ft_fc7_trn');
-        b_fc7_trn = compressLSH(ft_fc7_trn', LSHparam_fc7);
-        % b_fc7_trn = compressAEH(ft_fc7_trn', AEHparam_fc7);
-        % b_ipt_trn = compressAEH(ipt_trn', AEHparam_ipt);
-        % b_ipt_trn = compressLSH(ipt_trn', LSHparam_ipt);
-        save(feat_train_file, 'feat_train', '-v7.3');
-        binary_train = (feat_train>0.5);
-        % binary_train = [binary_train; b_fc7_trn'; b_ipt_trn'];
-        % binary_train = [binary_train; b_ipt_trn'];
-        binary_train = [binary_train; b_fc7_trn'];
-        binary_train = binary_train>0;
-        save(binary_train_file,'binary_train','-v7.3');
-    end
-case 'MODIFY32+LSH16'
-    feat_len = 32;
-    model_file = sprintf('./examples/cifar10/cifar10_%d_iter_20000.caffemodel', feat_len);
-    model_def_file = sprintf('./examples/bone-finetune/deploy_%d.prototxt', feat_len);
-    
-    LSHparam_fc7.nbits = param.nbits - feat_len;
-    LSHparam_fc7.dim = 4096;
-    LSHparam_fc7 = trainLSH(LSHparam_fc7);
-    
-    if exist(binary_test_file, 'file') ~= 0 && use_saved
-        load(binary_test_file);
-    else
-        [feat_test, ft_fc7_tst, ipt_tst] = feat_batch(use_gpu, model_def_file, model_file, test_file_list, feat_len);
-        save([result_folder, 'ft_fc7_tst'], 'ft_fc7_tst');
-        b_fc7_tst = compressLSH(ft_fc7_tst', LSHparam_fc7);
-        save(feat_test_file, 'feat_test', '-v7.3');
-        binary_test = (feat_test>0.5);
-        binary_test = [binary_test; b_fc7_tst'];
-        binary_test = binary_test>0;
-        save(binary_test_file,'binary_test','-v7.3');
-    end
-    
-    if exist(binary_train_file, 'file') ~= 0 && use_saved
-        load(binary_train_file);
-    else
-        [feat_train, ft_fc7_trn, ipt_trn]= feat_batch(use_gpu, model_def_file, model_file, train_file_list, feat_len);
         save([result_folder, 'ft_fc7_trn'], 'ft_fc7_trn');
         b_fc7_trn = compressLSH(ft_fc7_trn', LSHparam_fc7);
         save(feat_train_file, 'feat_train', '-v7.3');
@@ -126,203 +318,10 @@ case 'MODIFY32+LSH16'
         binary_train = binary_train>0;
         save(binary_train_file,'binary_train','-v7.3');
     end
-
-case 'SSDH12+LSH36'
-    feat_len = 12;
-    param.sp_bits = feat_len;
-    model_file = sprintf('./examples/cifar10/cifar10_%d_iter_50000.caffemodel', feat_len);
-    model_def_file = sprintf('./examples/bone-finetune/deploy_%d.prototxt', feat_len);
-    
-    LSHparam_fc7.nbits = param.nbits - feat_len;
-    LSHparam_fc7.dim = 4096;
-    LSHparam_fc7 = trainLSH(LSHparam_fc7);
-    
-    if exist(binary_test_file, 'file') ~= 0 && use_saved
-        load(binary_test_file);
-    else
-        [feat_test, ft_fc7_tst, ipt_tst] = feat_batch(use_gpu, model_def_file, model_file, test_file_list, feat_len);
-        save([result_folder, 'ft_fc7_tst'], 'ft_fc7_tst');
-        b_fc7_tst = compressLSH(ft_fc7_tst', LSHparam_fc7);
-        save(feat_test_file, 'feat_test', '-v7.3');
-        binary_test = (feat_test>0.5);
-        binary_test = [binary_test; b_fc7_tst'];
-        binary_test = binary_test>0;
-        save(binary_test_file,'binary_test','-v7.3');
-    end
-    
-    if exist(binary_train_file, 'file') ~= 0 && use_saved
-        load(binary_train_file);
-    else
-        [feat_train, ft_fc7_trn, ipt_trn]= feat_batch(use_gpu, model_def_file, model_file, train_file_list, feat_len);
-        save([result_folder, 'ft_fc7_trn'], 'ft_fc7_trn');
-        b_fc7_trn = compressLSH(ft_fc7_trn', LSHparam_fc7);
-        save(feat_train_file, 'feat_train', '-v7.3');
-        binary_train = (feat_train>0.5);
-        binary_train = [binary_train; b_fc7_trn'];
-        binary_train = binary_train>0;
-        save(binary_train_file,'binary_train','-v7.3');
-    end
-case 'SSDH24+LSH24'
-    feat_len = 24;
-    param.sp_bits = feat_len;
-    model_file = sprintf('./examples/cifar10/cifar10_%d_iter_50000.caffemodel', feat_len);
-    model_def_file = sprintf('./examples/bone-finetune/deploy_%d.prototxt', feat_len);
-    
-    LSHparam_fc7.nbits = param.nbits - feat_len;
-    LSHparam_fc7.dim = 4096;
-    LSHparam_fc7 = trainLSH(LSHparam_fc7);
-    
-    if exist(binary_test_file, 'file') ~= 0 && use_saved
-        load(binary_test_file);
-    else
-        [feat_test, ft_fc7_tst, ipt_tst] = feat_batch(use_gpu, model_def_file, model_file, test_file_list, feat_len);
-        save([result_folder, 'ft_fc7_tst'], 'ft_fc7_tst');
-        b_fc7_tst = compressLSH(ft_fc7_tst', LSHparam_fc7);
-        save(feat_test_file, 'feat_test', '-v7.3');
-        binary_test = (feat_test>0.5);
-        binary_test = [binary_test; b_fc7_tst'];
-        binary_test = binary_test>0;
-        save(binary_test_file,'binary_test','-v7.3');
-    end
-    
-    if exist(binary_train_file, 'file') ~= 0 && use_saved
-        load(binary_train_file);
-    else
-        [feat_train, ft_fc7_trn, ipt_trn]= feat_batch(use_gpu, model_def_file, model_file, train_file_list, feat_len);
-        save([result_folder, 'ft_fc7_trn'], 'ft_fc7_trn');
-        b_fc7_trn = compressLSH(ft_fc7_trn', LSHparam_fc7);
-        save(feat_train_file, 'feat_train', '-v7.3');
-        binary_train = (feat_train>0.5);
-        binary_train = [binary_train; b_fc7_trn'];
-        binary_train = binary_train>0;
-        save(binary_train_file,'binary_train','-v7.3');
-    end
-case 'SSDH32+LSH16'
-    feat_len = 32;
-    param.sp_bits = feat_len;
-    model_file = sprintf('./examples/cifar10/cifar10_%d_iter_50000.caffemodel', feat_len);
-    model_def_file = sprintf('./examples/bone-finetune/deploy_%d.prototxt', feat_len);
-    
-    LSHparam_fc7.nbits = param.nbits - feat_len;
-    LSHparam_fc7.dim = 4096;
-    LSHparam_fc7 = trainLSH(LSHparam_fc7);
-    
-    if exist(binary_test_file, 'file') ~= 0 && use_saved
-        load(binary_test_file);
-    else
-        [feat_test, ft_fc7_tst, ipt_tst] = feat_batch(use_gpu, model_def_file, model_file, test_file_list, feat_len);
-        save([result_folder, 'ft_fc7_tst'], 'ft_fc7_tst');
-        b_fc7_tst = compressLSH(ft_fc7_tst', LSHparam_fc7);
-        save(feat_test_file, 'feat_test', '-v7.3');
-        binary_test = (feat_test>0.5);
-        binary_test = [binary_test; b_fc7_tst'];
-        binary_test = binary_test>0;
-        save(binary_test_file,'binary_test','-v7.3');
-    end
-    
-    if exist(binary_train_file, 'file') ~= 0 && use_saved
-        load(binary_train_file);
-    else
-        [feat_train, ft_fc7_trn, ipt_trn]= feat_batch(use_gpu, model_def_file, model_file, train_file_list, feat_len);
-        save([result_folder, 'ft_fc7_trn'], 'ft_fc7_trn');
-        b_fc7_trn = compressLSH(ft_fc7_trn', LSHparam_fc7);
-        save(feat_train_file, 'feat_train', '-v7.3');
-        binary_train = (feat_train>0.5);
-        binary_train = [binary_train; b_fc7_trn'];
-        binary_train = binary_train>0;
-        save(binary_train_file,'binary_train','-v7.3');
-    end
-case 'SSDH24+ORI24'
-
-    assert(strcmp(exp_data.ft_type, 'euclidean'));
-    feat_len = 24;
-    param.sp_bits = feat_len;
-    model_file = sprintf('./examples/cifar10/cifar10_%d_iter_50000.caffemodel', feat_len);
-    model_def_file = sprintf('./examples/bone-finetune/deploy_%d.prototxt', feat_len);
-    
-    LSHparam_ipt.nbits = param.nbits - feat_len;
-    LSHparam_ipt.dim = 32 * 32 * 3;
-    LSHparam_ipt = trainLSH(LSHparam_ipt);
-
-    num_training = size(train_data, 1);
-    XX = [train_data; test_data];
-    sampleMean = mean(XX,1);
-    XX = (double(XX)-repmat(sampleMean,size(XX,1),1));
-    train_data = XX(1:num_training, :);
-    test_data = XX(num_training+1:end, :);
-
-    if exist(binary_test_file, 'file') ~= 0 && use_saved
-        load(binary_test_file);
-    else
-        [feat_test, ft_fc7_tst, ipt_tst] = feat_batch(use_gpu, model_def_file, model_file, test_file_list, feat_len);
-        b_ipt_tst = compressLSH(test_data, LSHparam_ipt);
-        save(feat_test_file, 'feat_test', '-v7.3');
-        binary_test = (feat_test>0.5);
-        binary_test = [binary_test; b_ipt_tst'];
-        binary_test = binary_test>0;
-        save(binary_test_file,'binary_test','-v7.3');
-    end
-    
-    if exist(binary_train_file, 'file') ~= 0 && use_saved
-        load(binary_train_file);
-    else
-        [feat_train, ft_fc7_trn, ipt_trn]= feat_batch(use_gpu, model_def_file, model_file, train_file_list, feat_len);
-        b_ipt_trn = compressLSH(train_data, LSHparam_ipt);
-        save(feat_train_file, 'feat_train', '-v7.3');
-        binary_train = (feat_train>0.5);
-        binary_train = [binary_train; b_ipt_trn'];
-        binary_train = binary_train>0;
-        save(binary_train_file,'binary_train','-v7.3');
-    end
-case 'SSDH24+HOG24'
-    if ~strcmp(exp_data.ft_type, 'hog')
-        hog_data = load(['./data/', db_name, '/cifar_hog.mat', ]);
-        train_data = hog_data.train_data;
-        test_data = hog_data.test_data;
-    end
-    feat_len = 24;
-    param.sp_bits = feat_len;
-    model_file = sprintf('./examples/cifar10/cifar10_%d_iter_50000.caffemodel', feat_len);
-    model_def_file = sprintf('./examples/bone-finetune/deploy_%d.prototxt', feat_len);
-    
-    num_training = size(train_data, 1);
-    XX = [train_data; test_data];
-    sampleMean = mean(XX,1);
-    XX = (double(XX)-repmat(sampleMean,size(XX,1),1));
-    train_data = XX(1:num_training, :);
-    test_data = XX(num_training+1:end, :);
-
-    LSHparam_ipt.nbits = param.nbits - feat_len;
-    LSHparam_ipt.dim = size(test_data, 2);
-    LSHparam_ipt = trainLSH(LSHparam_ipt);
-    
-    if exist(binary_test_file, 'file') ~= 0 && use_saved
-        load(binary_test_file);
-    else
-        feat_test = feat_batch(use_gpu, model_def_file, model_file, test_file_list, feat_len);
-        b_ipt_tst = compressLSH(test_data, LSHparam_ipt);
-        save(feat_test_file, 'feat_test', '-v7.3');
-        binary_test = (feat_test>0.5);
-        binary_test = [binary_test; b_ipt_tst'];
-        binary_test = binary_test>0;
-        save(binary_test_file,'binary_test','-v7.3');
-    end
-    
-    if exist(binary_train_file, 'file') ~= 0 && use_saved
-        load(binary_train_file);
-    else
-        feat_train = feat_batch(use_gpu, model_def_file, model_file, train_file_list, feat_len);
-        b_ipt_trn = compressLSH(train_data, LSHparam_ipt);
-        save(feat_train_file, 'feat_train', '-v7.3');
-        binary_train = (feat_train>0.5);
-        binary_train = [binary_train; b_ipt_trn'];
-        binary_train = binary_train>0;
-        save(binary_train_file,'binary_train','-v7.3');
-    end
-case 'SSDH48'
-    feat_len = 48;
-    model_file = sprintf('./examples/cifar10/cifar10_%d_iter_50000.caffemodel', feat_len);
-    model_def_file = sprintf('./examples/bone-finetune/deploy.prototxt', feat_len);
+elseif ~isempty(strfind(method_name, 'SSDH'))
+    feat_len = sscanf(method_name, 'SSDH%d');
+    model_file = sprintf('./models/%s/%s_%d_iter_50000.caffemodel', db_name, db_name, feat_len);
+    model_def_file = sprintf('./examples/%s/deploy_%d.prototxt', db_name, feat_len);
     
     if exist(binary_test_file, 'file') ~= 0 && use_saved
         load(binary_test_file);
@@ -343,7 +342,6 @@ case 'SSDH48'
         binary_train = [binary_train];
         save(binary_train_file,'binary_train','-v7.3');
     end
-
 end
 
 fprintf('computing hamming distance for %s\n', method_name);

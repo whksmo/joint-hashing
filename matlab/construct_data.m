@@ -2,7 +2,8 @@ function exp_data = construct_data(db_info)
 tic
 fprintf('start constructing %s\n', [db_info.name, '_', db_info.type]);
 if strcmp(db_info.name, 'cifar100') && strcmp(db_info.type, 'euclidean')
-    dataset_path = './data/cifar100/';
+    dataset_path = '/data/images/cifar-100/';
+    save_path = './data/cifar100/';
     num_tst = 10000;
     num_trn = 50000;
     if ~exist('./data/cifar100/cifar100_euclidean.mat','file')
@@ -16,7 +17,7 @@ if strcmp(db_info.name, 'cifar100') && strcmp(db_info.type, 'euclidean')
         for i = 1 : num_tst
             img_name = tst_file_list(i);
             img_name = img_name{1};
-            img = imread(img_name);
+            img = imread([dataset_path, img_name]);
             test_data(i, :, :, :) = img;
         end
         
@@ -28,7 +29,7 @@ if strcmp(db_info.name, 'cifar100') && strcmp(db_info.type, 'euclidean')
         for i = 1 : num_trn
             img_name = trn_file_list(i);
             img_name = img_name{1};
-            img = imread(img_name);
+            img = imread([dataset_path, img_name]);
             train_data(i, :, :, :) = img;
         end
         test_data = uint8(reshape(test_data, num_tst, []));
@@ -36,7 +37,7 @@ if strcmp(db_info.name, 'cifar100') && strcmp(db_info.type, 'euclidean')
         total_data = [test_data; train_data];
         fprintf('computing euclidean feature for %s\n', db_info.name);
         
-        Nneighbors=0.02 * num_trn;
+        Nneighbors = 0.02 * num_trn;
         DtrueTestTraining = distMat(test_data, train_data); % size = [Ntest x Ntraining]
         [Dball, I] = sort(DtrueTestTraining, 2); %sort columns
         exp_data.knn_p2 = uint32(I(:, 1:Nneighbors)); %take firsr 1000 nearest train datas compared to each test data
@@ -45,7 +46,7 @@ if strcmp(db_info.name, 'cifar100') && strcmp(db_info.type, 'euclidean')
         exp_data.test_data = test_data;
         exp_data.train_label = trn_label_list;
         exp_data.test_label = tst_label_list;
-        save([dataset_path, db_info.name, '_', db_info.type], 'exp_data');
+        save([save_path, db_info.name, '_', db_info.type], 'exp_data');
         fprintf('constructing %s database has finished\n', [db_info.name, '_', db_info.type]);
     else
         load ./data/cifar100/cifar100_euclidean exp_data

@@ -9,7 +9,7 @@ if ischar(list_im)
     %Assume it is a file contaning the list of images
     filename = list_im;
     list_im = read_cell(filename);
-    if strfind(list_im{1},'cifar100')
+    if strfind(list_im{1},'cifar-100')
         local = false;
     else
         local = true;

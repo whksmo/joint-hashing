@@ -77,8 +77,7 @@ case 'visualization'
     fprintf('Visualizing the results of %s\n', method_name);
         if exist([read_path, ind_file_name],'file')
             fprintf('use exist %s\n', ind_file_name);
-            load([read_path, ind_file_name],'ind');
-            sim_ind = ind;
+            load([read_path, ind_file_name],'sim_ind');
             toc
         elseif exist([read_path, sim_file_name], 'file')
             fprintf('generate %s by similarity matrix\n', ind_file_name);
@@ -96,9 +95,15 @@ case 'visualization'
             save([read_path, ind_file_name], 'sim_ind');
         end
         show_truth = false;
-        retrieved_list = visualize_cifar10(sim_ind, param);
-        if show_truth
-            retrieved_true_list = visualize_cifar10(trueRank, param);
+        if strcmp(db_name, 'cifar10')
+            fprintf('visualizing cifar10\n');
+            retrieved_list = visualize_cifar10(sim_ind, param);
+            if show_truth
+                retrieved_true_list = visualize_cifar10(trueRank, param);
+            end
+        elseif strcmp(db_name, 'cifar100')
+            fprintf('visualizing cifar100\n');
+            retrieved_list = visualize_cifar100(sim_ind, param);
         end
         rec = [];
         pre = [];

@@ -188,10 +188,7 @@ if visualize
         sim_ind = sim_ind(:, 1:param.numRetrieval);
         save ./analysis/a/sim_ind sim_ind
     end
-    
-    
 
-    
     if (cifar10)
         retrieval_info = visualize_cifar10(1, sim_ind, param);
     else

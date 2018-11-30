@@ -14,7 +14,7 @@ rm -rf $EXAMPLE/cifar100_train_$DBTYPE $EXAMPLE/cifar100_test_$DBTYPE
 
 echo "Computing image mean..."
 
-./build/tools/compute_image_mean -backend=$DBTYPE \
-  $EXAMPLE/cifar100_train_$DBTYPE $EXAMPLE/mean.binaryproto
+# ./build/tools/compute_image_mean -backend=$DBTYPE \
+#   $EXAMPLE/cifar100_train_$DBTYPE $EXAMPLE/mean.binaryproto
 
 echo "Done."

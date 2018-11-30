@@ -4,10 +4,11 @@
 % Recall-The number of retrieved samples curve.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% param.choice = 'evaluation';
-param.choice = 'visualization';
+param.choice = 'evaluation';
+% param.choice = 'visualization';
 param.numRetrieval=48;
-param.query_id = 595;%889;40% 816;1018  1025
+% param.query_id = 595;%889;40% 816;1018  1025
+param.query_id = 199;%15;
 param.top_k = 587;
 param.use_gpu = true;
 param.use_saved = true;
@@ -17,15 +18,15 @@ param.use_saved_sim = true;
 param.choose_label = 1;
 param.pos = [1:10:40 50:100:1000 1000]; % The number of retrieved samples: Recall-The number of retrieved samples curve
 
-db_info.name = 'cifar10';
+db_info.name = 'cifar100';
 % db_info.type = 'hog';
 db_info.type = 'euclidean';
 % db_info.type = 'ssim';
-hashmethods = {'SSDH24+AEH24'};
+hashmethods = {'SSDH36+LSH12','SSDH24+LSH24','SSDH48'};
 
 % different unsupervised methods with HoG feature
 % hashmethods = { 'SSDH24+LSH24',  'SSDH24+ORI24', 'SSDH48'}; 
-db_info.type = 'hog';
+% db_info.type = 'hog';
 
 % different unsupervised methods with Euclidean feature
 % hashmethods = {'SSDH24+AEH24',  'SSDH24+ORI24', 'SSDH48'}; 
@@ -53,6 +54,8 @@ tree_like = zeros(1, nhmethods);
 % hashmethods = {'SSDH_cifar10'};
 % hashmethods = {'SSDH32+LSH16'};
 % hashmethods = {'MODIFY32+LSH16'};
+
+
 % loopnbits = [16 32 64 128];
 loopnbits = [48];
 runtimes = 1;
@@ -74,9 +77,11 @@ for k = 1:runtimes
         param.nbits = loopnbits(i);
         for j = 1:nhmethods
             param.use_tree = tree_like(j);
-             [mAP{k}{i,j}, rec{k}{i, j}, pre{k}{i, j}, ~] = ...
+            [mAP{k}{i,j}, rec{k}{i, j}, pre{k}{i, j}, retrieval_list{1,j}] = ...
                         compute_res(exp_data, param, hashmethods{1, j});
-                    fprintf('map for %s is: %f\n', hashmethods{1,j}, mAP{k}{i,j});
+            if strcmp(param.choice, 'evaluation')
+                fprintf('map for %s is: %f\n', hashmethods{1,j}, mAP{k}{i,j});
+            end
         end
     end
 end
